@@ -15,14 +15,12 @@ import {
 export default function App() {
   const [rolls, setRolls] = useState(1000);
   const [diceCount, setDiceCount] = useState(3);
-  const [results, setResults] = useState<number[]>([]);
   const [frequency, setFrequency] = useState<{ sum: number; count: number; value?: number }[]>([]);
   const [lastRolls, setLastRolls] = useState<number[][]>([]);
   const [showNormal, setShowNormal] = useState(true);
   const chartRef = useRef(null);
 
   const rollDice = () => {
-    const sums: number[] = [];
     const freqMap: Record<number, number> = {};
     const recent: number[][] = [];
 
@@ -35,7 +33,6 @@ export default function App() {
         rollCombo.push(r);
       }
       if (i < 5) recent.push(rollCombo);
-      sums.push(rollSum);
       freqMap[rollSum] = (freqMap[rollSum] || 0) + 1;
     }
 
@@ -54,7 +51,6 @@ export default function App() {
       return { sum, count, value };
     });
 
-    setResults(sums);
     setLastRolls(recent);
     setFrequency(freqWithNormal);
   };
