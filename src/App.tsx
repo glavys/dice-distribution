@@ -105,7 +105,56 @@ export default function App() {
         </button>
       </div>
 
-      {/* Остальной код не меняется */}
+      {lastRolls.length > 0 && (
+        <div style={{ marginTop: "2rem" }}>
+          <h2 style={{ fontSize: "20px", fontWeight: "bold" }}>🎯 Последние 5 бросков:</h2>
+          <table style={{ width: "100%", borderCollapse: "collapse", marginTop: "0.5rem" }}>
+            <thead>
+              <tr>
+                <th style={{ borderBottom: "1px solid #ccc", padding: "4px" }}>#</th>
+                <th style={{ borderBottom: "1px solid #ccc", padding: "4px" }}>Сумма</th>
+                <th style={{ borderBottom: "1px solid #ccc", padding: "4px" }}>Комбинация</th>
+              </tr>
+            </thead>
+            <tbody>
+              {lastRolls.map((combo, idx) => (
+                <tr key={idx}>
+                  <td style={{ padding: "4px" }}>{idx + 1}</td>
+                  <td style={{ padding: "4px" }}>{combo.reduce((a, b) => a + b, 0)}</td>
+                  <td style={{ padding: "4px" }}>[{combo.join(", ")}]</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      )}
+
+      {frequency.length > 0 && (
+        <div style={{ marginTop: "2rem" }}>
+          <h2 style={{ fontSize: "20px", fontWeight: "bold", color: "black" }}>📊 График распределения:</h2>
+          <div ref={chartRef} style={{ marginTop: "1rem", background: "white", padding: "1rem", borderRadius: "8px", boxShadow: "0 0 10px rgba(0,0,0,0.1)" }}>
+            <ResponsiveContainer width="100%" height={300}>
+              <ComposedChart data={frequency}>
+                <CartesianGrid strokeDasharray="3 3" />
+                <XAxis dataKey="sum" />
+                <YAxis />
+                <Tooltip />
+                <Bar dataKey="count" fill="#10b981" />
+                {showNormal && <Line type="monotone" dataKey="value" stroke="#ef4444" dot={false} />}
+              </ComposedChart>
+            </ResponsiveContainer>
+          </div>
+          <button
+            onClick={downloadChart}
+            style={{ marginTop: "1rem", padding: "0.5rem 1rem", backgroundColor: "#059669", color: "white", border: "none", borderRadius: "5px" }}
+          >
+            Скачать график PNG
+          </button>
+          <p style={{ marginTop: "1rem", fontStyle: "italic", color: "#374151" }}>
+            Чем больше кубиков, тем больше распределение похоже на нормальное (колоколообразное). Красная линия — теоретическая кривая Гаусса 📈
+          </p>
+        </div>
+      )}
     </div>
   );
 }
