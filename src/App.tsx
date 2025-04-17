@@ -16,6 +16,7 @@ export default function App() {
   const [rolls, setRolls] = useState(1000);
   const [diceCount, setDiceCount] = useState(3);
   const [frequency, setFrequency] = useState<{ sum: number; count: number; value?: number }[]>([]);
+  const [allRolls, setAllRolls] = useState<number[][]>([]);
   const [lastRolls, setLastRolls] = useState<number[][]>([]);
   const [showNormal, setShowNormal] = useState(true);
   const chartRef = useRef(null);
@@ -23,6 +24,7 @@ export default function App() {
   const rollDice = () => {
     const freqMap: Record<number, number> = {};
     const recent: number[][] = [];
+    const fullHistory: number[][] = [];
 
     for (let i = 0; i < rolls; i++) {
       const rollCombo: number[] = [];
@@ -33,6 +35,7 @@ export default function App() {
         rollCombo.push(r);
       }
       if (i < 5) recent.push(rollCombo);
+      fullHistory.push(rollCombo);
       freqMap[rollSum] = (freqMap[rollSum] || 0) + 1;
     }
 
@@ -52,6 +55,7 @@ export default function App() {
     });
 
     setLastRolls(recent);
+    setAllRolls(fullHistory);
     setFrequency(freqWithNormal);
   };
 
@@ -68,34 +72,34 @@ export default function App() {
     <div style={{ padding: "2rem", fontFamily: "Arial, sans-serif", backgroundColor: "#f9fafb", minHeight: "100vh", color: "#333" }}>
       <h1 style={{ fontSize: "32px", fontWeight: "bold", color: "#1d4ed8" }}>🎲 Симулятор бросков кубиков</h1>
 
-      <div style={{ marginTop: "1rem", display: "flex", gap: "1rem", flexWrap: "wrap" }}>
-        <label style={{ color: "#1e3a8a" }}>
+      <div style={{ marginTop: "1rem", display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(220px, 1fr))", gap: "1rem" }}>
+        <label style={{ color: "#111", fontWeight: 500, backgroundColor: "#e5e7eb", padding: "0.5rem", borderRadius: "6px" }}>
           Кол-во бросков:
           <input
             type="number"
             min={1}
             value={rolls}
             onChange={(e) => setRolls(Number(e.target.value))}
-            style={{ padding: "0.5rem", marginLeft: "0.5rem", fontSize: "16px", borderRadius: "4px", border: "1px solid #ccc", color: "#1e3a8a" }}
+            style={{ width: "100%", marginTop: "0.25rem", padding: "0.5rem", fontSize: "16px", borderRadius: "4px", border: "1px solid #ccc", color: "#1e3a8a" }}
           />
         </label>
-        <label style={{ color: "#065f46" }}>
+        <label style={{ color: "#111", fontWeight: 500, backgroundColor: "#e5e7eb", padding: "0.5rem", borderRadius: "6px" }}>
           Кол-во кубиков:
           <input
             type="number"
             min={1}
             value={diceCount}
             onChange={(e) => setDiceCount(Number(e.target.value))}
-            style={{ padding: "0.5rem", marginLeft: "0.5rem", fontSize: "16px", borderRadius: "4px", border: "1px solid #ccc", color: "#065f46" }}
+            style={{ width: "100%", marginTop: "0.25rem", padding: "0.5rem", fontSize: "16px", borderRadius: "4px", border: "1px solid #ccc", color: "#065f46" }}
           />
         </label>
-        <label style={{ display: "flex", alignItems: "center", color: "#b45309" }}>
+        <label style={{ display: "flex", alignItems: "center", fontWeight: 500, color: "#111" }}>
           <input type="checkbox" checked={showNormal} onChange={() => setShowNormal(!showNormal)} style={{ marginRight: "0.5rem" }} />
           Показать нормальную кривую
         </label>
         <button
           onClick={rollDice}
-          style={{ padding: "0.5rem 1rem", backgroundColor: "#2563eb", color: "white", border: "none", borderRadius: "5px" }}
+          style={{ padding: "0.5rem 1rem", backgroundColor: "#2563eb", color: "white", border: "none", borderRadius: "5px", height: "fit-content" }}
         >
           Бросить!
         </button>
@@ -122,6 +126,32 @@ export default function App() {
               ))}
             </tbody>
           </table>
+        </div>
+      )}
+
+      {allRolls.length > 5 && (
+        <div style={{ marginTop: "2rem" }}>
+          <h2 style={{ fontSize: "20px", fontWeight: "bold" }}>📚 История всех бросков:</h2>
+          <div style={{ maxHeight: "200px", overflowY: "auto", backgroundColor: "#fff", padding: "1rem", border: "1px solid #e5e7eb", borderRadius: "8px" }}>
+            <table style={{ width: "100%", borderCollapse: "collapse" }}>
+              <thead>
+                <tr>
+                  <th style={{ borderBottom: "1px solid #ccc", padding: "4px" }}>#</th>
+                  <th style={{ borderBottom: "1px solid #ccc", padding: "4px" }}>Сумма</th>
+                  <th style={{ borderBottom: "1px solid #ccc", padding: "4px" }}>Комбинация</th>
+                </tr>
+              </thead>
+              <tbody>
+                {allRolls.map((combo, idx) => (
+                  <tr key={idx}>
+                    <td style={{ padding: "4px" }}>{idx + 1}</td>
+                    <td style={{ padding: "4px" }}>{combo.reduce((a, b) => a + b, 0)}</td>
+                    <td style={{ padding: "4px" }}>[{combo.join(", ")}]</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
         </div>
       )}
 
