@@ -17,17 +17,24 @@ export default function App() {
   const [diceCount, setDiceCount] = useState(3);
   const [results, setResults] = useState<number[]>([]);
   const [frequency, setFrequency] = useState<{ sum: number; count: number; value?: number }[]>([]);
+  const [lastRolls, setLastRolls] = useState<number[][]>([]);
+  const [showNormal, setShowNormal] = useState(true);
   const chartRef = useRef(null);
 
   const rollDice = () => {
     const sums: number[] = [];
     const freqMap: Record<number, number> = {};
+    const recent: number[][] = [];
 
     for (let i = 0; i < rolls; i++) {
+      const rollCombo: number[] = [];
       let rollSum = 0;
       for (let j = 0; j < diceCount; j++) {
-        rollSum += Math.floor(Math.random() * 6 + 1);
+        const r = Math.floor(Math.random() * 6 + 1);
+        rollSum += r;
+        rollCombo.push(r);
       }
+      if (i < 5) recent.push(rollCombo);
       sums.push(rollSum);
       freqMap[rollSum] = (freqMap[rollSum] || 0) + 1;
     }
@@ -48,6 +55,7 @@ export default function App() {
     });
 
     setResults(sums);
+    setLastRolls(recent);
     setFrequency(freqWithNormal);
   };
 
@@ -84,6 +92,10 @@ export default function App() {
             onChange={(e) => setDiceCount(Number(e.target.value))}
             style={{ padding: "0.5rem", marginLeft: "0.5rem", fontSize: "16px", borderRadius: "4px", border: "1px solid #ccc" }}
           />
+        </label>
+        <label style={{ display: "flex", alignItems: "center" }}>
+          <input type="checkbox" checked={showNormal} onChange={() => setShowNormal(!showNormal)} style={{ marginRight: "0.5rem" }} />
+          Показать нормальную кривую
         </label>
         <button
           onClick={rollDice}
@@ -125,9 +137,33 @@ export default function App() {
         </div>
       )}
 
+      {lastRolls.length > 0 && (
+        <div style={{ marginTop: "2rem" }}>
+          <h2 style={{ fontSize: "20px", fontWeight: "bold" }}>🎯 Последние 5 бросков:</h2>
+          <table style={{ width: "100%", borderCollapse: "collapse", marginTop: "0.5rem" }}>
+            <thead>
+              <tr>
+                <th style={{ borderBottom: "1px solid #ccc", padding: "4px" }}>#</th>
+                <th style={{ borderBottom: "1px solid #ccc", padding: "4px" }}>Сумма</th>
+                <th style={{ borderBottom: "1px solid #ccc", padding: "4px" }}>Комбинация</th>
+              </tr>
+            </thead>
+            <tbody>
+              {lastRolls.map((combo, idx) => (
+                <tr key={idx}>
+                  <td style={{ padding: "4px" }}>{idx + 1}</td>
+                  <td style={{ padding: "4px" }}>{combo.reduce((a, b) => a + b, 0)}</td>
+                  <td style={{ padding: "4px" }}>[{combo.join(", ")}]</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      )}
+
       {frequency.length > 0 && (
         <div style={{ marginTop: "2rem" }}>
-          <h2 style={{ fontSize: "20px", fontWeight: "bold" }}>📊 График распределения:</h2>
+          <h2 style={{ fontSize: "20px", fontWeight: "bold", color: "black" }}>📊 График распределения:</h2>
           <div ref={chartRef} style={{ marginTop: "1rem", background: "white", padding: "1rem", borderRadius: "8px", boxShadow: "0 0 10px rgba(0,0,0,0.1)" }}>
             <ResponsiveContainer width="100%" height={300}>
               <ComposedChart data={frequency}>
@@ -136,7 +172,7 @@ export default function App() {
                 <YAxis />
                 <Tooltip />
                 <Bar dataKey="count" fill="#10b981" />
-                <Line type="monotone" dataKey="value" stroke="#ef4444" dot={false} />
+                {showNormal && <Line type="monotone" dataKey="value" stroke="#ef4444" dot={false} />}
               </ComposedChart>
             </ResponsiveContainer>
           </div>
