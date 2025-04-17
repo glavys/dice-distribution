@@ -16,8 +16,7 @@ export default function App() {
   const [rolls, setRolls] = useState(1000);
   const [diceCount, setDiceCount] = useState(3);
   const [results, setResults] = useState<number[]>([]);
-  const [frequency, setFrequency] = useState<{ sum: number; count: number }[]>([]);
-  const [normalData, setNormalData] = useState<{ sum: number; value: number }[]>([]);
+  const [frequency, setFrequency] = useState<{ sum: number; count: number; value?: number }[]>([]);
   const chartRef = useRef(null);
 
   const rollDice = () => {
@@ -42,15 +41,14 @@ export default function App() {
 
     const mean = diceCount * 3.5;
     const stdDev = Math.sqrt(diceCount * ((6 ** 2 - 1) / 12));
-    const normalPoints = freqArray.map(({ sum }) => {
+    const freqWithNormal = freqArray.map(({ sum, count }) => {
       const exponent = -((sum - mean) ** 2) / (2 * stdDev ** 2);
       const value = (1 / (stdDev * Math.sqrt(2 * Math.PI))) * Math.exp(exponent) * rolls;
-      return { sum, value };
+      return { sum, count, value };
     });
 
     setResults(sums);
-    setFrequency(freqArray.map((d, i) => ({ ...d, value: normalPoints[i].value })));
-    setNormalData(normalPoints);
+    setFrequency(freqWithNormal);
   };
 
   const downloadChart = async () => {
