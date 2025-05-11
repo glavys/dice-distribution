@@ -62,6 +62,22 @@ export default function App() {
     }
   };
 
+  const downloadCSV = () => {
+    if (allRolls.length === 0) return;
+
+    const header = "Номер броска,Сумма,Комбинация
+";
+    const rows = allRolls.map((combo, idx) => {
+      const sum = combo.reduce((a, b) => a + b, 0);
+      return `${idx + 1},${sum},"[${combo.join(", ")}]"`;
+    });
+
+    const csvContent = header + rows.join("
+");
+    const blob = new Blob([csvContent], { type: "text/csv;charset=utf-8;" });
+    saveAs(blob, "таблица_бросков.csv");
+  };
+
   return (
     <div style={{ display: "flex", flexDirection: "column", alignItems: "center", padding: "2rem", fontFamily: "Arial, sans-serif", backgroundColor: "#e0f2fe", minHeight: "100vh", width: "100vw", color: "#333" }}>
       <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
@@ -145,6 +161,12 @@ export default function App() {
                 ))}
               </tbody>
             </table>
+            <button
+              onClick={downloadCSV}
+              style={{ marginTop: "1rem", padding: "0.5rem 1rem", backgroundColor: "#3b82f6", color: "white", border: "none", borderRadius: "5px" }}
+            >
+              Скачать таблицу в CSV
+            </button>
           </div>
         </div>
       )}
