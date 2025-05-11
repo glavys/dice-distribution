@@ -22,6 +22,10 @@ export default function App() {
   const [showInfo, setShowInfo] = useState(false);
 
   const rollDice = () => {
+  if (diceCount < 2) {
+    alert("Нельзя бросить меньше двух кубиков!");
+    return;
+  }
     const freqMap: Record<number, number> = {};
     const fullHistory: number[][] = [];
 
