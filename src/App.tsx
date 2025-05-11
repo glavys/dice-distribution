@@ -63,20 +63,19 @@ export default function App() {
   };
 
   const downloadCSV = () => {
-  if (allRolls.length === 0) return;
-
-  const header = "Номер броска,Сумма,Комбинация
-";
-  const rows = allRolls.map((combo, idx) => {
-    const sum = combo.reduce((a, b) => a + b, 0);
-    return `${idx + 1},${sum},"[${combo.join(", ")}]"`;
-  });
-
-  const csvContent = header + rows.join("
-");
-  const blob = new Blob([csvContent], { type: "text/csv;charset=utf-8;" });
-  saveAs(blob, "таблица_бросков.csv");
-};
+    if (allRolls.length === 0) return;
+  
+    const header = "Номер броска,Сумма,Комбинация\n";
+    const rows = allRolls.map((combo, idx) => {
+      const sum = combo.reduce((a, b) => a + b, 0);
+      return `${idx + 1},${sum},"[${combo.join(", ")}]"`;
+    });
+  
+    const csvContent = header + rows.join("\n");
+    const blob = new Blob([csvContent], { type: "text/csv;charset=utf-8;" });
+    saveAs(blob, "таблица_бросков.csv");
+  };
+  
 
   return (
     <div style={{ display: "flex", flexDirection: "column", alignItems: "center", padding: "2rem", fontFamily: "Arial, sans-serif", backgroundColor: "#e0f2fe", minHeight: "100vh", width: "100vw", color: "#333" }}>
