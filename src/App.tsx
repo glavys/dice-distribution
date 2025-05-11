@@ -109,7 +109,7 @@ export default function App() {
           Кол-во бросков:
           <input
             type="number"
-            min={1}
+            min={2}
             value={rolls}
             onChange={(e) => setRolls(Number(e.target.value))}
             style={{ width: "100%", marginTop: "0.25rem", padding: "0.5rem", fontSize: "16px", borderRadius: "4px", border: "1px solid #ccc", backgroundColor: "#f9fafb", color: "#1e3a8a" }}
@@ -119,7 +119,7 @@ export default function App() {
           Кол-во кубиков:
           <input
             type="number"
-            min={1}
+            min={2}
             value={diceCount}
             onChange={(e) => setDiceCount(Number(e.target.value))}
             style={{ width: "100%", marginTop: "0.25rem", padding: "0.5rem", fontSize: "16px", borderRadius: "4px", border: "1px solid #ccc", backgroundColor: "#f9fafb", color: "#065f46" }}
