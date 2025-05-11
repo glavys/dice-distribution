@@ -64,14 +64,16 @@ export default function App() {
 
   const downloadCSV = () => {
     if (allRolls.length === 0) return;
-  
-    const header = "Номер броска,Сумма,Комбинация\n";
+
+    const header = "Номер броска,Сумма,Комбинация
+";
     const rows = allRolls.map((combo, idx) => {
       const sum = combo.reduce((a, b) => a + b, 0);
       return `${idx + 1},${sum},"[${combo.join(", ")}]"`;
     });
-  
-    const csvContent = header + rows.join("\n");
+
+    const csvContent = header + rows.join("
+");
     const blob = new Blob([csvContent], { type: "text/csv;charset=utf-8;" });
     saveAs(blob, "таблица_бросков.csv");
   };
@@ -139,7 +141,10 @@ export default function App() {
 
       {allRolls.length > 0 && (
         <div style={{ marginTop: "2rem" }}>
-          <h2 style={{ fontSize: "20px", fontWeight: "bold" }}>📚 История всех бросков:</h2>
+          <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+  <h2 style={{ fontSize: "20px", fontWeight: "bold" }}>📚 История всех бросков:</h2>
+  
+</div>
           <div style={{ maxHeight: "300px", overflowY: "auto", backgroundColor: "#fff", padding: "1rem", border: "1px solid #e5e7eb", borderRadius: "8px" }}>
             <table style={{ width: "100%", borderCollapse: "collapse", tableLayout: "fixed" }}>
               <thead>
