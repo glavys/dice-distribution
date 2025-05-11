@@ -63,7 +63,7 @@ export default function App() {
   };
 
   return (
-    <div style={{ padding: "2rem", fontFamily: "Arial, sans-serif", backgroundColor: "#e0f2fe", minHeight: "100vh", color: "#333" }}>
+    <div style={{ display: "flex", flexDirection: "column", alignItems: "center", padding: "2rem", fontFamily: "Arial, sans-serif", backgroundColor: "#e0f2fe", minHeight: "100vh", width: "100vw", color: "#333" }}>
       <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
         <h1 style={{ fontSize: "32px", fontWeight: "bold", color: "#1d4ed8" }}>🎲 Симулятор бросков кубиков</h1>
         <button onClick={() => setShowInfo(!showInfo)} style={{ background: "#111", color: "white", border: "none", fontSize: "20px", cursor: "pointer", padding: "0.3rem 0.8rem", borderRadius: "6px" }}>
