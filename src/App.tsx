@@ -158,7 +158,7 @@ export default function App() {
   <h2 style={{ fontSize: "20px", fontWeight: "bold" }}>📚 История всех бросков:</h2>
   
 </div>
-          <div style={{ maxHeight: "300px", overflowY: "auto", backgroundColor: "#fff", padding: "1rem", border: "1px solid #e5e7eb", borderRadius: "8px" }}>
+          <div style={{ maxHeight: "300px", overflowY: "auto", backgroundColor: "#fff", padding: "1rem", border: "1px solid #e5e7eb", borderRadius: "8px", minWidth: "600px" }}>
             <table style={{ width: "100%", borderCollapse: "collapse", tableLayout: "fixed" }}>
               <thead>
                 <tr>
@@ -185,7 +185,7 @@ export default function App() {
       {frequency.length > 0 && (
         <div style={{ marginTop: "2rem" }}>
           <h2 style={{ fontSize: "20px", fontWeight: "bold", color: "black" }}>📊 График распределения:</h2>
-          <div ref={chartRef} style={{ marginTop: "1rem", background: "white", padding: "1rem", borderRadius: "8px", boxShadow: "0 0 10px rgba(0,0,0,0.1)" }}>
+          <div ref={chartRef} style={{ marginTop: "1rem", background: "white", padding: "1rem", borderRadius: "8px", boxShadow: "0 0 10px rgba(0,0,0,0.1)", minWidth: "600px" }}>
             <ResponsiveContainer width="100%" height={300}>
               <ComposedChart data={frequency}>
                 <CartesianGrid strokeDasharray="3 3" />
