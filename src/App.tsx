@@ -75,7 +75,7 @@ export default function App() {
     return `${idx + 1},${sum},"[${combo.join(", ")}]"`;
   });
 
-  const csvContent = header + rows.join("\n");
+  const csvContent = "﻿" + header + rows.join("\n");
   const blob = new Blob([csvContent], { type: "text/csv;charset=utf-8;" });
   saveAs(blob, "таблица_бросков.csv");
 };
@@ -177,12 +177,7 @@ export default function App() {
                 ))}
               </tbody>
             </table>
-            <button
-              onClick={downloadCSV}
-              style={{ marginTop: "1rem", padding: "0.5rem 1rem", backgroundColor: "#3b82f6", color: "white", border: "none", borderRadius: "5px" }}
-            >
-              Скачать таблицу в CSV
-            </button>
+            
           </div>
         </div>
       )}
@@ -202,15 +197,21 @@ export default function App() {
               </ComposedChart>
             </ResponsiveContainer>
           </div>
-          <button
-            onClick={downloadChart}
-            style={{ marginTop: "1rem", padding: "0.5rem 1rem", backgroundColor: "#059669", color: "white", border: "none", borderRadius: "5px" }}
-          >
-            Скачать график PNG
-          </button>
-          <p style={{ marginTop: "1rem", fontStyle: "italic", color: "#374151" }}>
-            Чем больше кубиков, тем больше распределение похоже на нормальное (колоколообразное). Красная линия — теоретическая кривая Гаусса 📈
-          </p>
+          
+          <div style={{ display: 'flex', gap: '1rem', marginTop: '1rem' }}>
+  <button
+    onClick={downloadChart}
+    style={{ padding: '0.5rem 1rem', backgroundColor: '#059669', color: 'white', border: 'none', borderRadius: '5px' }}
+  >
+    Скачать график PNG
+  </button>
+  <button
+    onClick={downloadCSV}
+    style={{ padding: '0.5rem 1rem', backgroundColor: '#3b82f6', color: 'white', border: 'none', borderRadius: '5px' }}
+  >
+    Скачать таблицу в CSV
+  </button>
+</div>
         </div>
       )}
     </div>
